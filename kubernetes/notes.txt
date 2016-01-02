@@ -1,0 +1,13 @@
+Create a k8s cluster
+
+gcloud config set project $GCP_PROJECT
+gcloud container clusters create $CLUSTER_NAME
+gcloud container clusters list
+
+# Install Docker
+
+Create a container for the website
+
+docker build -t hno-nginx:0.0.1 .
+(docker rm hno-nginx)
+docker run --name hno-nginx -p 80:80 hno-nginx:0.0.1

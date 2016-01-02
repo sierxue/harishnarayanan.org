@@ -1,0 +1,8 @@
+server {
+    listen 80;
+    server_name localhost harishnarayanan.org www.harishnarayanan.org;
+
+    location / {
+        root /var/www/html;
+    }
+}
