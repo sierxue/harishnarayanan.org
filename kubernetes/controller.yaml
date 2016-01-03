@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: website
+  labels:
+    name: website
+spec:
+  replicas: 3
+  selector:
+    name: website
+  template:
+    metadata:
+      labels:
+        name: website
+    spec:
+      containers:
+      - name: hno-nginx
+        image: gcr.io/enduring-maxim-89315/hno-nginx:0.0.4
+        env:
+        - name: GET_HOSTS_FROM
+          value: dns
+        ports:
+        - containerPort: 80
