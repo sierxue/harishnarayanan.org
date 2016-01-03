@@ -1,23 +1,33 @@
-Create a k8s cluster
+# Instructions for deployment with Docker and Kubernetes
 
-gcloud config set project $GCP_PROJECT
-gcloud container clusters create $CLUSTER_NAME
-gcloud container clusters list
+## Install Docker for local development
 
-# Install Docker
+## Create a container that serves the site
 
-Create a container for the website
-
+````
 docker build -t hno-nginx:0.0.1 .
 (docker rm hno-nginx)
 docker run --name hno-nginx -p 80:80 hno-nginx:0.0.1
+````
 
-Push the container to Google's container registry
+## Push the container to Google's container registry
 
+````
 docker tag hno-nginx:0.0.4 gcr.io/$GCP_PROJECT/hno-nginx:0.0.4
 gcloud docker push gcr.io/$GCP_PROJECT/hno-nginx:0.0.4
+````
 
-Instruct k8s to run the containers
+## Create a k8s cluster
+
+````
+gcloud config set project $GCP_PROJECT
+gcloud container clusters create $CLUSTER_NAME
+gcloud container clusters list
+````
+
+## Instruct k8s to run the containers
+
+````
 gcloud compute addresses create site
 (gcloud compute addresses list) # to get the $SITE_IP
 kubectl run site --replicas=4 -l app=hno,version=0.0.4 --image=gcr.io/$GCP_PROJECT/hno-nginx:0.0.4
@@ -29,3 +39,4 @@ gcloud compute forwarding-rules create site --port-range 80 --address $SITE_IP -
 
 Scale the pods
 kubectl scale --replicas=3 replicationcontrollers site
+````
